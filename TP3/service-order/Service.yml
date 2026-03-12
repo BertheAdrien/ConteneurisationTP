@@ -1,0 +1,12 @@
+[cite_start]apiVersion: v1 [cite: 170]
+[cite_start]kind: Service [cite: 171]
+metadata:
+  [cite_start]name: service-order [cite: 173]
+spec:
+  selector:
+    [cite_start]app: service-order [cite: 176]
+  ports:
+    - [cite_start]protocol: TCP [cite: 178]
+      [cite_start]port: 80 [cite: 179]
+      [cite_start]targetPort: 5002 [cite: 180]
+  [cite_start]type: LoadBalancer [cite: 181]
