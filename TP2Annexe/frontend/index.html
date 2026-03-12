@@ -1,0 +1,9 @@
+<body>
+  <div id="out">Attente...</div>
+  <script>
+    // Appelle le port exposé sur la machine hôte
+    fetch('http://localhost:3000')
+      .then(r => r.json())
+      .then(d => document.getElementById('out').innerText = d.message);
+  </script>
+</body>
