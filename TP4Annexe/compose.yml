@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16-alpine
+    env_file: ./ops/dev.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck: [cite: 99]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy [cite: 108]
+    env_file: ./ops/dev.env
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      api:
+        condition: service_started [cite: 118]
+    ports:
+      - "8080:80"
+
+volumes:
+  pgdata:

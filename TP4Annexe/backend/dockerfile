@@ -1,0 +1,15 @@
+# Stage 1: Builder
+FROM python:3.12 AS builder
+WORKDIR /app
+COPY . .
+# Simulation d'installation et build [cite: 46, 51]
+RUN pip install --upgrade pip && pip install poetry && poetry build
+
+# Stage 2: Runtime (Image légère) [cite: 52, 53]
+FROM python:3.12-slim AS runtime
+WORKDIR /app
+COPY --from=builder /app/dist/*.whl .
+# Healthcheck pour la prod [cite: 60]
+HEALTHCHECK --interval=30s --timeout=5s CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"
+EXPOSE 8000
+CMD ["python", "-m", "http.server", "8000"]
